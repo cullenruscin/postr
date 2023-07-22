@@ -14,7 +14,6 @@ CREATE TABLE [User] (
   [Id] int PRIMARY KEY IDENTITY(1, 1),
   [FirebaseUserId] varchar(28) NOT NULL,
   [Username] varchar(32) NOT NULL,
-  [Password] varchar(64) NOT NULL,
   [Email] varchar(64) NOT NULL,
   [CreateDate] datetime NOT NULL
 )
