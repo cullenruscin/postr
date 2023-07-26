@@ -7,25 +7,33 @@ GO
 USE [Postr];
 GO
 
-DROP TABLE IF EXISTS [User]
+DROP TABLE IF EXISTS [UserType]
+DROP TABLE IF EXISTS [UserProfile]
 DROP TABLE IF EXISTS [Post]
 
-CREATE TABLE [User] (
+CREATE TABLE [UserType] (
+ [Id] int PRIMARY KEY IDENTITY(1, 1),
+ [Name] varchar(20) NOT NULL
+)
+
+CREATE TABLE [UserProfile] (
   [Id] int PRIMARY KEY IDENTITY(1, 1),
   [FirebaseUserId] varchar(28) NOT NULL,
-  [Username] varchar(32) NOT NULL,
+  [DisplayName] varchar(32) NOT NULL,
   [Email] varchar(64) NOT NULL,
-  [CreateDate] datetime NOT NULL
+  [CreateDate] datetime NOT NULL,
+  [UserTypeId] int NOT NULL,
+
+  CONSTRAINT [FK_User_UserType] FOREIGN KEY ([UserTypeId]) REFERENCES [UserType] ([Id]),
+  CONSTRAINT [UQ_FirebaseUserId] UNIQUE(FirebaseUserId)
 )
-GO
 
 CREATE TABLE [Post] (
   [Id] int PRIMARY KEY IDENTITY(1, 1),
-  [UserId] int NOT NULL,
+  [UserProfileId] int NOT NULL,
   [Content] varchar(256) NOT NULL,
   [CreateDate] datetime NOT NULL
-)
-GO
 
-ALTER TABLE [Post] ADD FOREIGN KEY ([UserId]) REFERENCES [User] ([Id])
+  CONSTRAINT [FK_Post_UserProfile] FOREIGN KEY ([UserProfileId]) REFERENCES [UserProfile] ([Id])
+)
 GO

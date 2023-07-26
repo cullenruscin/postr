@@ -7,7 +7,7 @@ namespace Postr.Models
     {
         public int Id { get; set; } 
 
-        public int UserId { get; set; }
+        public int UserProfileId { get; set; }
 
         [MaxLength(256)]
         public string Content { get; set; }
