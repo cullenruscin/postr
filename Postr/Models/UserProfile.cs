@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Microsoft.SqlServer.Server;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Postr.Models
 {
-    public class User
+    public class UserProfile
     {
         public int Id { get; set; }
 
@@ -12,7 +13,7 @@ namespace Postr.Models
 
         [Required]
         [MaxLength(32)]
-        public string Username { get; set; }
+        public string DisplayName { get; set; }
 
         [Required]
         [DataType(DataType.EmailAddress)]
@@ -20,5 +21,9 @@ namespace Postr.Models
         public string Email { get; set; }
 
         public DateTime CreateDate { get; set; }
+
+        [Required]
+        public int UserTypeId { get; set; }
+        public UserType UserType { get; set; }
     }
 }

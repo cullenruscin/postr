@@ -1,12 +1,14 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import PostList from "./post/PostList";
+import Login from "./auth/Login";
 
-const ApplicationViews = () => {
+const ApplicationViews = ({ isLoggedIn, role }) => {
     return (
         <Routes>
             <Route path="/" >
-                <Route index element={<PostList />} />
+                <Route index element={isLoggedIn ? <PostList /> : <Navigate to="/login" />} />
+                <Route path="login" element={<Login />} />
                 <Route path="posts">
                     <Route index element={<PostList />} />
                     <Route path="new" element={<p>TODO: Make Post Form component</p>} />

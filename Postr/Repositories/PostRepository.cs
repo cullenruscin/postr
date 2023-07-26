@@ -17,7 +17,7 @@ namespace Postr.Repositories
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"SELECT Id, UserId, Content, CreateDate
+                    cmd.CommandText = @"SELECT Id, UserProfileId, Content, CreateDate
                                         FROM Post";
 
                     using (SqlDataReader reader = cmd.ExecuteReader())
@@ -28,7 +28,7 @@ namespace Postr.Repositories
                             posts.Add(new Post()
                             {
                                 Id = DbUtils.GetInt(reader, "Id"),
-                                UserId = DbUtils.GetInt(reader, "UserId"),
+                                UserProfileId = DbUtils.GetInt(reader, "UserProfileId"),
                                 Content = DbUtils.GetString(reader, "Content"),
                                 CreateDate = DbUtils.GetDateTime(reader, "CreateDate")
                             });
