@@ -17,8 +17,13 @@ namespace Postr.Repositories
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"SELECT Id, UserProfileId, Content, CreateDate
-                                        FROM Post";
+                    cmd.CommandText = @"SELECT p.Id, p.UserProfileId, p.Content, p.CreateDate,
+                                               
+                                        up.FirebaseUserId, up.FirstName, up.LastName, up.DisplayName, 
+                                        up.Email, up.CreateDate, up.UserTypeId                                       
+
+                                        FROM [Post] p
+                                        JOIN UserProfile up ON p.UserProfileId = up.Id";
 
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
@@ -28,9 +33,20 @@ namespace Postr.Repositories
                             posts.Add(new Post()
                             {
                                 Id = DbUtils.GetInt(reader, "Id"),
-                                UserProfileId = DbUtils.GetInt(reader, "UserProfileId"),
                                 Content = DbUtils.GetString(reader, "Content"),
-                                CreateDate = DbUtils.GetDateTime(reader, "CreateDate")
+                                CreateDate = DbUtils.GetDateTime(reader, "CreateDate"),
+                                UserProfileId = DbUtils.GetInt(reader, "UserProfileId"),
+                                UserProfile = new UserProfile()
+                                {
+                                    Id = DbUtils.GetInt(reader, "UserProfileId"),
+                                    FirebaseUserId = DbUtils.GetString(reader, "FirebaseUserId"),
+                                    FirstName = DbUtils.GetString(reader, "FirstName"),
+                                    LastName = DbUtils.GetString(reader, "LastName"),
+                                    DisplayName = DbUtils.GetString(reader, "DisplayName"),
+                                    Email = DbUtils.GetString(reader, "Email"),
+                                    CreateDate = DbUtils.GetDateTime(reader, "CreateDate"),
+                                    UserTypeId = DbUtils.GetInt(reader, "UserTypeId")
+                                }
                             });
                         }
                         return posts;

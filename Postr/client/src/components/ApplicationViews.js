@@ -11,7 +11,6 @@ const ApplicationViews = ({ isLoggedIn, role }) => {
                 <Route path="login" element={<Login />} />
                 <Route path="posts">
                     <Route index element={<PostList />} />
-                    <Route path="new" element={<p>TODO: Make Post Form component</p>} />
                     <Route path=":id" element={<p>TODO: Make Post Details component</p>} />
                 </Route>
             </Route>

@@ -19,8 +19,11 @@ namespace Postr.Repositories
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"SELECT up.Id, up.FirebaseUserId, up.DisplayName, up.Email, up.CreateDate, up.UserTypeId, ut.Name AS UserTypeName
+                    cmd.CommandText = @"SELECT up.Id, up.FirebaseUserId, up.DisplayName, up.FirstName, up.LastName,
+                                        up.Email, up.CreateDate, up.UserTypeId, ut.Name AS UserTypeName
+
                                         FROM [UserProfile] up
+
                                         LEFT JOIN UserType ut on up.UserTypeId = ut.Id";
 
                     using (SqlDataReader reader = cmd.ExecuteReader()) 
@@ -32,6 +35,8 @@ namespace Postr.Repositories
                             {
                                 Id = DbUtils.GetInt(reader, "Id"),
                                 FirebaseUserId = DbUtils.GetString(reader, "FirebaseUserId"),
+                                FirstName = DbUtils.GetString(reader, "FirstName"),
+                                LastName = DbUtils.GetString(reader, "LastName"),
                                 DisplayName = DbUtils.GetString(reader, "DisplayName"),
                                 Email = DbUtils.GetString(reader, "Email"),
                                 CreateDate = DbUtils.GetDateTime(reader, "CreateDate"),
@@ -56,9 +61,13 @@ namespace Postr.Repositories
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"SELECT up.Id, up.FirebaseUserId, up.DisplayName, up.Email, up.CreateDate, up.UserTypeId, ut.Name AS UserTypeName
+                    cmd.CommandText = @"SELECT up.Id, up.FirebaseUserId, up.DisplayName, up.FirstName, up.LastName,
+                                        up.Email, up.CreateDate, up.UserTypeId, ut.Name AS UserTypeName
+
                                         FROM [UserProfile] up
+
                                         LEFT JOIN UserType ut on up.UserTypeId = ut.Id
+
                                         WHERE FirebaseUserId = @FirebaseUserId";
 
                     DbUtils.AddParameter(cmd, "@FirebaseUserId", firebaseUserId);
@@ -73,6 +82,8 @@ namespace Postr.Repositories
                             {
                                 Id = DbUtils.GetInt(reader, "Id"),
                                 FirebaseUserId = DbUtils.GetString(reader, "FirebaseUserId"),
+                                FirstName = DbUtils.GetString(reader, "FirstName"),
+                                LastName = DbUtils.GetString(reader, "LastName"),
                                 DisplayName = DbUtils.GetString(reader, "DisplayName"),
                                 Email = DbUtils.GetString(reader, "Email"),
                                 CreateDate = DbUtils.GetDateTime(reader, "CreateDate"),
@@ -99,9 +110,13 @@ namespace Postr.Repositories
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"SELECT up.Id, up.FirebaseUserId, up.DisplayName, up.Email, up.CreateDate, up.UserTypeId, ut.Name AS UserTypeName
+                    cmd.CommandText = @"SELECT up.Id, up.FirebaseUserId, up.DisplayName, up.FirstName, up.LastName,
+                                        up.Email, up.CreateDate, up.UserTypeId, ut.Name AS UserTypeName
+
                                         FROM [UserProfile] up
+
                                         LEFT JOIN UserType ut on up.UserTypeId = ut.Id
+
                                         WHERE up.Id = @Id";
 
                     DbUtils.AddParameter(cmd, "@Id", id);
@@ -116,6 +131,8 @@ namespace Postr.Repositories
                             {
                                 Id = DbUtils.GetInt(reader, "Id"),
                                 FirebaseUserId = DbUtils.GetString(reader, "FirebaseUserId"),
+                                FirstName = DbUtils.GetString(reader, "FirstName"),
+                                LastName = DbUtils.GetString(reader, "LastName"),
                                 DisplayName = DbUtils.GetString(reader, "DisplayName"),
                                 Email = DbUtils.GetString(reader, "Email"),
                                 CreateDate = DbUtils.GetDateTime(reader, "CreateDate"),
@@ -142,11 +159,13 @@ namespace Postr.Repositories
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand()) 
                 {
-                    cmd.CommandText = @"INSERT INTO [UserProfile] (FirebaseUserId, DisplayName, Email, CreateDate, UserTypeId)
+                    cmd.CommandText = @"INSERT INTO [UserProfile] (FirebaseUserId, FirstName, LastName, DisplayName, Email, CreateDate, UserTypeId)
                                         OUTPUT INSERTED.ID
-                                        VALUES (@FirebaseUserId, @DisplayName, @Email, @CreateDate, @UserTypeId)";
+                                        VALUES (@FirebaseUserId, @FirstName, @LastName, @DisplayName, @Email, @CreateDate, @UserTypeId)";
 
                     DbUtils.AddParameter(cmd, "@FirebaseUserId", userProfile.FirebaseUserId);
+                    DbUtils.AddParameter(cmd, "@FirstName", userProfile.FirstName);
+                    DbUtils.AddParameter(cmd, "@LastName", userProfile.LastName);
                     DbUtils.AddParameter(cmd, "@DisplayName", userProfile.DisplayName);
                     DbUtils.AddParameter(cmd, "@Email", userProfile.Email);
                     DbUtils.AddParameter(cmd, "@CreateDate", userProfile.CreateDate);

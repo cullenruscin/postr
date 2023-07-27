@@ -19,6 +19,8 @@ CREATE TABLE [UserType] (
 CREATE TABLE [UserProfile] (
   [Id] int PRIMARY KEY IDENTITY(1, 1),
   [FirebaseUserId] varchar(28) NOT NULL,
+  [FirstName] varchar(48) NOT NULL,
+  [LastName] varchar(48) NOT NULL,
   [DisplayName] varchar(32) NOT NULL,
   [Email] varchar(64) NOT NULL,
   [CreateDate] datetime NOT NULL,

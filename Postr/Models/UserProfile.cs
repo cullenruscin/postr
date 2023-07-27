@@ -12,6 +12,14 @@ namespace Postr.Models
         public string FirebaseUserId { get; set; }
 
         [Required]
+        [MaxLength(48)]
+        public string FirstName { get; set; }
+
+        [Required]
+        [MaxLength(48)]
+        public string LastName { get; set; }
+
+        [Required]
         [MaxLength(32)]
         public string DisplayName { get; set; }
 
@@ -25,5 +33,13 @@ namespace Postr.Models
         [Required]
         public int UserTypeId { get; set; }
         public UserType UserType { get; set; }
+
+        public string FullName
+        {
+            get
+            {
+                return $"{FirstName} {LastName}";
+            }
+        }
     }
 }
