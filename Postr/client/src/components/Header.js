@@ -31,7 +31,10 @@ export const Header = ({ isLoggedIn, role }) => {
                             </>
                         }
                         {!isLoggedIn &&
-                            <Link className="navbar-item" to="/login">Login</Link>
+                            <>
+                                <Link className="navbar-item" to="/login">Login</Link>
+                                <Link className="navbar-item" to="/register">Register</Link>
+                            </>
                         }
                     </div>
                 </div>
