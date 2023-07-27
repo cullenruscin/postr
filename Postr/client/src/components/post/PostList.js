@@ -14,12 +14,10 @@ const PostList = () => {
     }, []);
 
     return (
-        <div className="container is-max-desktop">
-            <div className="block mt-2">
-                {posts.map(post => (
-                    <Post post={post} key={post.id} />
-                ))}
-            </div>
+        <div className="block mt-2">
+            {posts.map(post => (
+                <Post post={post} key={post.id} />
+            ))}
         </div>
     );
 };

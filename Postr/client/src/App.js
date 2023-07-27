@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
-import Header from "./components/Header";
-import ApplicationViews from "./components/ApplicationViews";
+import NavBar from "./components/nav/NavBar";
+import ApplicationViews from "./components/views/ApplicationViews";
 import { onLoginStatusChange, getUserDetails } from "./modules/authManager";
 import firebase from "firebase";
 
@@ -32,7 +32,7 @@ function App() {
   return (
     <div className="App">
       <Router>
-        <Header isLoggedIn={isLoggedIn} role={role} />
+        <NavBar isLoggedIn={isLoggedIn} role={role} />
         <ApplicationViews isLoggedIn={isLoggedIn} role={role} />
       </Router>
     </div>

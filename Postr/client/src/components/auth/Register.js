@@ -12,7 +12,7 @@ const Register = () => {
     const [password, setPassword] = useState();
     const [confirmPassword, setConfirmPassword] = useState();
 
-    const registerClick = (e) => {
+    const registerButtonOnClick = (e) => {
         e.preventDefault();
         if (password && password !== confirmPassword) {
             alert("Passwords don't match. Do better.");
@@ -28,66 +28,70 @@ const Register = () => {
     };
 
     return (
-        <form>
-            <fieldset>
-                <label className="label">First Name</label>
-                <input
-                    id="firstName"
-                    type="text"
-                    className="input"
-                    onChange={(e) => setFirstName(e.target.value)}
-                />
-            </fieldset>
-            <fieldset>
-                <label className="label">Last Name</label>
-                <input
-                    id="lastName"
-                    type="text"
-                    className="input"
-                    onChange={(e) => setLastName(e.target.value)}
-                />
-            </fieldset>
-            <fieldset>
-                <label className="label">Display Name</label>
-                <input
-                    id="displayName"
-                    type="text"
-                    className="input"
-                    onChange={(e) => setDisplayName(e.target.value)}
-                />
-            </fieldset>
-            <fieldset>
-                <label className="label">Email</label>
-                <input
-                    id="email"
-                    type="email"
-                    className="input"
-                    onChange={(e) => setEmail(e.target.value)}
-                />
-            </fieldset>
-            <fieldset>
-                <label className="label">Password</label>
-                <input
-                    id="password"
-                    type="password"
-                    className="input"
-                    onChange={(e) => setPassword(e.target.value)}
-                />
-            </fieldset>
-            <fieldset>
-                <label className="label">Confirm Password</label>
-                <input
-                    id="confirmPassword"
-                    type="password"
-                    className="input"
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                />
-            </fieldset>
-            <button
-                onClick={(clickEvent) => registerClick(clickEvent)}
-                className="button"
-            >Register</button>
-        </form>
+        <div className="container is-max-desktop">
+            <form className="box mt-5">
+                <h2 className="title is-4">Register a Postr account</h2>
+                <fieldset className="field">
+                    <input
+                        required autoFocus
+                        id="register-first-name"
+                        type="text"
+                        className="input"
+                        placeholder="First Name"
+                        onChange={(e) => setFirstName(e.target.value)}
+                    />
+                </fieldset>
+                <fieldset className="field">
+                    <input
+                        id="register-last-name"
+                        type="text"
+                        className="input"
+                        placeholder="Last Name"
+                        onChange={(e) => setLastName(e.target.value)}
+                    />
+                </fieldset>
+                <fieldset className="field">
+                    <input
+                        id="register-display-name"
+                        type="text"
+                        className="input"
+                        placeholder="Display Name"
+                        onChange={(e) => setDisplayName(e.target.value)}
+                    />
+                </fieldset>
+                <fieldset className="field">
+                    <input
+                        id="register-email"
+                        type="email"
+                        className="input"
+                        placeholder="Email"
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+                </fieldset>
+                <fieldset className="field">
+                    <input
+                        id="register-password"
+                        type="password"
+                        className="input"
+                        placeholder="Password"
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                </fieldset>
+                <fieldset className="field">
+                    <input
+                        id="register-confirm-password"
+                        type="password"
+                        className="input"
+                        placeholder="Confirm Password"
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                    />
+                </fieldset>
+                <button
+                    onClick={(clickEvent) => registerButtonOnClick(clickEvent)}
+                    className="button is-link"
+                >Create Account</button>
+            </form>
+        </div>
     );
 };
 
