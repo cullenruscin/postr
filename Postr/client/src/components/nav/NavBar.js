@@ -1,17 +1,13 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { logout } from "../modules/authManager";
+import React from "react";
+import { Link } from "react-router-dom";
+import { logout } from "../../modules/authManager";
 
-export const Header = ({ isLoggedIn, role }) => {
-
-    const [isOpen, setIsOpen] = useState(false);
-    const toggle = () => setIsOpen(!isOpen);
-
+export const NavBar = ({ isLoggedIn }) => {
     return (
         <nav className="navbar" role="navigation" aria-label="main navigation">
             <div className="container is-max-desktop">
                 <div className="navbar-brand">
-                    <Link className="navbar-item" to="/">
+                    <Link className="navbar-item" to="/home">
                         <b>Postr</b>
                     </Link>
                     <div className="navbar-burger">
@@ -25,9 +21,9 @@ export const Header = ({ isLoggedIn, role }) => {
                     <div className="navbar-end">
                         {isLoggedIn &&
                             <>
-                                <Link className="navbar-item" to="/">Home</Link>
-                                <Link className="navbar-item" to="/">Profile</Link>
-                                <Link className="navbar-item" to="/" onClick={logout}>Logout</Link>
+                                <Link className="navbar-item" to="/home">Home</Link>
+                                <Link className="navbar-item" to="/user">Profile</Link>
+                                <Link className="navbar-item" to="/login" onClick={logout}>Logout</Link>
                             </>
                         }
                         {!isLoggedIn &&
@@ -43,4 +39,4 @@ export const Header = ({ isLoggedIn, role }) => {
     );
 };
 
-export default Header;
+export default NavBar;
