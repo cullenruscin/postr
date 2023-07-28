@@ -12,7 +12,7 @@ namespace Postr.Repositories
     {
         public UserProfileRepository(IConfiguration configuration) : base(configuration) { }
 
-        public List<UserProfile> GetAllUsers()
+        public List<UserProfile> GetAll()
         {
             using (SqlConnection conn = Connection)
             {

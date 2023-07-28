@@ -6,7 +6,7 @@ namespace Postr.Repositories
 {
     public interface IUserProfileRepository
     {
-        List<UserProfile> GetAllUsers();
+        List<UserProfile> GetAll();
         UserProfile GetByFirebaseUserId(string firebaseUserId);
         UserProfile GetById(int id);
         void Add(UserProfile user);

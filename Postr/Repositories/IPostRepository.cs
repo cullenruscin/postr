@@ -5,6 +5,8 @@ namespace Postr.Repositories
 {
     public interface IPostRepository
     {
-        List<Post> GetAllPosts();
+        List<Post> GetAll();
+        Post GetById(int id);
+        void Add(Post post);
     }
 }

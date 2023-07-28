@@ -34,6 +34,7 @@ namespace Postr
             services.AddTransient<IPostRepository, PostRepository>();
 
             services.AddControllers();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Postr", Version = "v1" });

@@ -45,7 +45,7 @@ namespace Postr.Controllers
             {
                 return Unauthorized();
             }
-            return Ok(_userProfileRepository.GetAllUsers());
+            return Ok(_userProfileRepository.GetAll());
         }
 
         [HttpGet("details/{id}")]
