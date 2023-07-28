@@ -13,15 +13,46 @@ namespace Postr.Controllers
     public class PostController : ControllerBase
     {
         private readonly IPostRepository _postRepository;
-        public PostController(IPostRepository postRepository)
+        private readonly IUserProfileRepository _userProfileRepository;
+        public PostController(IPostRepository postRepository, IUserProfileRepository userProfileRepository)
         {
             _postRepository = postRepository;
+            _userProfileRepository = userProfileRepository;
         }
 
         [HttpGet]
         public IActionResult GetAllPostsResult()
         {
-            return Ok(_postRepository.GetAllPosts());
+            return Ok(_postRepository.GetAll());
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetPostById(int id)
+        {
+            var post = _postRepository.GetById(id);
+            if (post == null)
+            {
+                return NotFound();
+            }
+            return Ok(post);
+        }
+
+        [HttpPost]
+        public IActionResult Post(Post post)
+        {
+            UserProfile user = GetCurrentUserProfile();
+
+            post.CreateDate = DateTime.Now;
+            post.UserProfileId = user.Id;
+            _postRepository.Add(post);
+            return CreatedAtAction(
+                nameof(GetPostById), new { post.Id }, post);
+        }
+
+        private UserProfile GetCurrentUserProfile()
+        {
+            var firebaseUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            return _userProfileRepository.GetByFirebaseUserId(firebaseUserId);
         }
     }
 }
