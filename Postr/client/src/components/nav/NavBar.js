@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { logout } from "../../modules/authManager";
 
-export const NavBar = ({ isLoggedIn }) => {
+export const NavBar = ({ isLoggedIn, currentUser }) => {
     return (
         <nav className="navbar" role="navigation" aria-label="main navigation">
             <div className="container is-max-desktop">
@@ -22,7 +22,7 @@ export const NavBar = ({ isLoggedIn }) => {
                         {isLoggedIn &&
                             <>
                                 <Link className="navbar-item" to="/home">Home</Link>
-                                <Link className="navbar-item" to="/user">Profile</Link>
+                                <Link className="navbar-item" to={`/user/${currentUser}`}>Profile</Link>
                                 <Link className="navbar-item" to="/login" onClick={logout}>Logout</Link>
                             </>
                         }

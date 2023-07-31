@@ -24,4 +24,4 @@ export const getUserDetailsById = (userId) => {
         })
             .then(res => res.json())
     })
-};
+}

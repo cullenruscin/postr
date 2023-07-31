@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Post from "./Post";
-import { getAllPosts } from "../../modules/postManager";
 
 const PostList = ({ posts }) => {
+
+    const sortedPosts = posts.sort((a, b) => new Date(b.createDate) - new Date(a.createDate));
+
     return (
-        <div className="block mt-2">
-            {posts.map(post => (
+        <div className="block mt-1">
+            {sortedPosts.map(post => (
                 <Post post={post} key={post.id} />
             ))}
         </div>

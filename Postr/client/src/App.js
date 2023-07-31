@@ -10,6 +10,8 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(null),
     [role, setRole] = useState("");
 
+  const [currentUser, setCurrentUser] = useState(0);
+
   useEffect(() => {
     onLoginStatusChange(setIsLoggedIn);
   }, []);
@@ -18,6 +20,7 @@ function App() {
     if (isLoggedIn) {
       getUserDetails(firebase.auth().currentUser.uid)
         .then(userObject => {
+          setCurrentUser(userObject.id)
           setRole(userObject.userType.name)
         })
     } else {
@@ -32,7 +35,7 @@ function App() {
   return (
     <div className="App">
       <Router>
-        <NavBar isLoggedIn={isLoggedIn} role={role} />
+        <NavBar isLoggedIn={isLoggedIn} currentUser={currentUser} />
         <ApplicationViews isLoggedIn={isLoggedIn} role={role} />
       </Router>
     </div>

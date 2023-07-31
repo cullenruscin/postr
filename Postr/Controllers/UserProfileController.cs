@@ -41,10 +41,7 @@ namespace Postr.Controllers
         public IActionResult GetAllUsersResult()
         {
             var currentUserProfile = GetCurrentUserProfileResult();
-            if (currentUserProfile.UserType.Name != "Admin")
-            {
-                return Unauthorized();
-            }
+            
             return Ok(_userProfileRepository.GetAll());
         }
 
@@ -52,10 +49,7 @@ namespace Postr.Controllers
         public IActionResult GetUserByIdResult(int id)
         {
             var currentUserProfile = GetCurrentUserProfileResult();
-            if (currentUserProfile.UserType.Name != "Admin")
-            {
-                return Unauthorized();
-            }
+            
 
             var userProfile = _userProfileRepository.GetById(id);
             if (userProfile == null)

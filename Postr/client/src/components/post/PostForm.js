@@ -20,7 +20,7 @@ const PostForm = ({ getPosts }) => {
     }
 
     return (
-        <div className="container mt-2">
+        <div className="container mt-1">
             <form className="box no-shadow">
                 <fieldset className="field">
                     <textarea

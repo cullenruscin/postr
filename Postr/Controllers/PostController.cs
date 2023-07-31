@@ -26,6 +26,12 @@ namespace Postr.Controllers
             return Ok(_postRepository.GetAll());
         }
 
+        [HttpGet("user/{id}")]
+        public IActionResult GetAllUserPostsResult(int id)
+        {
+            return Ok(_postRepository.GetByUserProfileId(id));
+        }
+
         [HttpGet("{id}")]
         public IActionResult GetPostById(int id)
         {
