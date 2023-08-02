@@ -21,15 +21,9 @@ namespace Postr.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllPostsResult()
+        public IActionResult GetPosts()
         {
             return Ok(_postRepository.GetAll());
-        }
-
-        [HttpGet("user/{id}")]
-        public IActionResult GetAllUserPostsResult(int id)
-        {
-            return Ok(_postRepository.GetByUserProfileId(id));
         }
 
         [HttpGet("{id}")]
@@ -43,6 +37,18 @@ namespace Postr.Controllers
             return Ok(post);
         }
 
+        [HttpGet("parent/{id}")]
+        public IActionResult GetPostsByParentId(int id)
+        {
+            return Ok(_postRepository.GetByParentId(id));
+        }
+
+        [HttpGet("user/{id}")]
+        public IActionResult GetAllUserPosts(int id)
+        {
+            return Ok(_postRepository.GetByUserProfileId(id));
+        } 
+
         [HttpPost]
         public IActionResult Post(Post post)
         {
@@ -53,6 +59,20 @@ namespace Postr.Controllers
             _postRepository.Add(post);
             return CreatedAtAction(
                 nameof(GetPostById), new { post.Id }, post);
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeletePost(int id)
+        {
+            var post = _postRepository.GetById(id);
+            if (post == null)
+            {
+                return NotFound();
+            }
+
+            _postRepository.SoftDelete(id);
+
+            return NoContent();
         }
 
         private UserProfile GetCurrentUserProfile()

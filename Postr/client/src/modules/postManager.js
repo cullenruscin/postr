@@ -21,9 +21,9 @@ export const getAllPosts = () => {
     });
 };
 
-export const getUserPosts = (id) => {
+export const getPostsByParentId = (parentId) => {
     return getToken().then((token) => {
-        return fetch(`${URL}/user/${id}`, {
+        return fetch(`${URL}/parent/${parentId}`, {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -40,10 +40,29 @@ export const getUserPosts = (id) => {
     });
 };
 
-export const getPostDetails = (id) => {
+export const getUserPosts = (userProfileId) => {
+    return getToken().then((token) => {
+        return fetch(`${URL}/user/${userProfileId}`, {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }).then((resp) => {
+            if (resp.ok) {
+                return resp.json();
+            } else {
+                throw new Error(
+                    "An unknown error occurred while trying to get posts.",
+                );
+            }
+        });
+    });
+};
+
+export const getPostDetails = (postId) => {
 
     return getToken().then(token => {
-        return fetch(`${URL}/${id}`, {
+        return fetch(`${URL}/${postId}`, {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${token}`
@@ -76,6 +95,26 @@ export const createPost = (post) => {
             } else {
                 throw new Error(
                     "An error occurred while trying to add a post.",
+                );
+            }
+        });
+    });
+}
+
+export const deletePost = (postId) => {
+    return getToken().then((token) => {
+        return fetch(`${URL}/${postId}`, {
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+            }
+        }).then((resp) => {
+            if (resp.ok) {
+                console.log("Post soft deleted successfully!")
+            } else {
+                throw new Error(
+                    "An error occurred while trying to soft delete a post.",
                 );
             }
         });

@@ -17,7 +17,7 @@ const HomePage = ({ currentUser }) => {
     return (
         <div className="container is-max-desktop">
             <PostForm getPosts={getPosts} />
-            <PostList posts={posts} currentUser={currentUser} />
+            <PostList posts={posts} currentUser={currentUser} getPosts={getPosts} />
         </div>
     );
 };

@@ -56,7 +56,6 @@ export const LikeButton = ({ post, currentUser }) => {
                         : <i className="material-icons-outlined">favorite_border</i>
                 }
             </span>
-            <span><p className="is-size-6 ml-1">{likeCount}</p></span>
         </button >
     );
 }
