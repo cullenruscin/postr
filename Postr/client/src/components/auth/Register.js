@@ -29,7 +29,7 @@ const Register = () => {
 
     return (
         <div className="container is-max-desktop">
-            <form className="box mt-5">
+            <form className="no-shadow box mt-5">
                 <h2 className="title is-4">Register a Postr account</h2>
                 <fieldset className="field">
                     <input

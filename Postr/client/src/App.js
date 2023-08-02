@@ -24,7 +24,7 @@ function App() {
           setRole(userObject.userType.name)
         })
     } else {
-      setRole("")
+      setCurrentUser(null);
     }
   }, [isLoggedIn]);
 
@@ -36,7 +36,7 @@ function App() {
     <div className="App">
       <Router>
         <NavBar isLoggedIn={isLoggedIn} currentUser={currentUser} />
-        <ApplicationViews isLoggedIn={isLoggedIn} role={role} />
+        <ApplicationViews isLoggedIn={isLoggedIn} currentUser={currentUser} role={role} />
       </Router>
     </div>
   );

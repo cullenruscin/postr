@@ -8,7 +8,11 @@ namespace Postr.Repositories
 {
     public class PostRepository : BaseRepository, IPostRepository
     {
-        public PostRepository(IConfiguration configuration) : base(configuration) { }
+        private readonly ILikeRepository _likeRepository;
+        public PostRepository(IConfiguration configuration, ILikeRepository likeRepository) : base(configuration)
+        {
+            _likeRepository = likeRepository;
+        }
 
         public List<Post> GetAll()
         {
@@ -19,10 +23,8 @@ namespace Postr.Repositories
                 {
                     cmd.CommandText = @"
                     SELECT p.Id, p.UserProfileId, p.Content, p.CreateDate,      
-
                     up.FirebaseUserId, up.FirstName, up.LastName, up.DisplayName, 
                     up.Email, up.CreateDate, up.UserTypeId                                       
-                    
                     FROM [Post] p
                     JOIN UserProfile up ON p.UserProfileId = up.Id";
 
@@ -31,7 +33,7 @@ namespace Postr.Repositories
                         var posts = new List<Post>();
                         while (reader.Read())
                         {
-                            posts.Add(new Post()
+                            var post = new Post()
                             {
                                 Id = DbUtils.GetInt(reader, "Id"),
                                 Content = DbUtils.GetString(reader, "Content"),
@@ -48,7 +50,12 @@ namespace Postr.Repositories
                                     CreateDate = DbUtils.GetDateTime(reader, "CreateDate"),
                                     UserTypeId = DbUtils.GetInt(reader, "UserTypeId")
                                 }
-                            });
+                            };
+
+                            post.Likes = _likeRepository.GetByPostId(post.Id);
+                            post.LikeCount = post.Likes.Count;
+
+                            posts.Add(post);
                         }
                         return posts;
                     }
@@ -64,22 +71,21 @@ namespace Postr.Repositories
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                    SELECT p.UserProfileId, p.Content, p.CreateDate,
-                    
-                    up.FirebaseUserId, up.FirstName, up.LastName, up.DisplayName, up.Email, up.CreateDate, up.UserTypeId
+                SELECT p.Id, p.UserProfileId, p.Content, p.CreateDate,
+                up.FirebaseUserId, up.FirstName, up.LastName, up.DisplayName, up.Email, up.CreateDate, up.UserTypeId
+                FROM Post p
+                JOIN UserProfile up ON p.UserProfileId = up.Id
+                WHERE p.Id = @Id";
 
-                    FROM Post p
-                    JOIN UserProfile up ON p.UserProfileId = up.Id
-                    WHERE p.Id = @Id";
+                    DbUtils.AddParameter(cmd, "@Id", id);
 
-                    DbUtils.AddParameter(cmd, "@Id", id);   
-                    using (SqlDataReader reader = cmd.ExecuteReader()) 
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        Post post = null;
                         if (reader.Read())
                         {
-                            post = new Post()
+                            var post = new Post()
                             {
+                                Id = DbUtils.GetInt(reader, "Id"),
                                 Content = DbUtils.GetString(reader, "Content"),
                                 CreateDate = DbUtils.GetDateTime(reader, "CreateDate"),
                                 UserProfileId = DbUtils.GetInt(reader, "UserProfileId"),
@@ -95,9 +101,17 @@ namespace Postr.Repositories
                                     UserTypeId = DbUtils.GetInt(reader, "UserTypeId")
                                 },
                             };
+
+                            // Fetch the likes for this post using the likeRepository
+                            post.Likes = _likeRepository.GetByPostId(post.Id);
+
+                            // Calculate the like count
+                            post.LikeCount = post.Likes.Count;
+
+                            return post;
                         }
-                        return post;
-                    }  
+                        return null;
+                    }
                 }
             }
         }
@@ -110,11 +124,11 @@ namespace Postr.Repositories
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        SELECT p.Id, p.Content, p.CreateDate,
-                            up.FirebaseUserId, up.FirstName, up.LastName, up.DisplayName, up.Email, up.CreateDate, up.UserTypeId
-                        FROM Post p
-                        JOIN UserProfile up ON p.UserProfileId = up.Id
-                        WHERE up.Id = @UserProfileId";
+                SELECT p.Id, p.Content, p.CreateDate,
+                    up.FirebaseUserId, up.FirstName, up.LastName, up.DisplayName, up.Email, up.CreateDate, up.UserTypeId
+                FROM Post p
+                JOIN UserProfile up ON p.UserProfileId = up.Id
+                WHERE up.Id = @UserProfileId";
 
                     DbUtils.AddParameter(cmd, "@UserProfileId", userProfileId);
 
@@ -123,7 +137,7 @@ namespace Postr.Repositories
                         var posts = new List<Post>();
                         while (reader.Read())
                         {
-                            posts.Add(new Post()
+                            var post = new Post()
                             {
                                 Id = DbUtils.GetInt(reader, "Id"),
                                 Content = DbUtils.GetString(reader, "Content"),
@@ -140,7 +154,15 @@ namespace Postr.Repositories
                                     CreateDate = DbUtils.GetDateTime(reader, "CreateDate"),
                                     UserTypeId = DbUtils.GetInt(reader, "UserTypeId")
                                 },
-                            });
+                            };
+
+                            // Fetch the likes for this post using the likeRepository
+                            post.Likes = _likeRepository.GetByPostId(post.Id);
+
+                            // Calculate the like count
+                            post.LikeCount = post.Likes.Count;
+
+                            posts.Add(post);
                         }
                         return posts;
                     }

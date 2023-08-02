@@ -21,7 +21,7 @@ export const getAllPosts = () => {
     });
 };
 
-export const getAllUserPosts = (id) => {
+export const getUserPosts = (id) => {
     return getToken().then((token) => {
         return fetch(`${URL}/user/${id}`, {
             method: "GET",
@@ -60,7 +60,7 @@ export const getPostDetails = (id) => {
     });
 }
 
-export const AddPost = (post) => {
+export const createPost = (post) => {
     return getToken().then((token) => {
         return fetch(URL, {
             method: "POST",

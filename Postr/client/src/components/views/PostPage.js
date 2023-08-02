@@ -1,9 +1,9 @@
 import PostDetails from "../post/PostDetails";
 
-const PostPage = () => {
+const PostPage = ({ currentUser }) => {
     return (
         <div className="container is-max-desktop">
-            <PostDetails />
+            <PostDetails currentUser={currentUser} />
         </div>
     )
 };

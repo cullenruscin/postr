@@ -21,6 +21,13 @@ VALUES (1, 1, 'Hello World!', GETDATE()),
 	   (3, 3, 'Nice to see you all!', GETDATE())
 SET IDENTITY_INSERT [Post] OFF
 
+SET IDENTITY_INSERT [Like] ON
+INSERT INTO [Like] ([Id], [UserProfileId], [PostId])
+VALUES (1, 1, 1),
+	   (2, 1, 2),
+	   (3, 1, 3)
+SET IDENTITY_INSERT [Like] OFF
+
 
 
 

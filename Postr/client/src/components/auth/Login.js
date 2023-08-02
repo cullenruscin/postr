@@ -17,7 +17,7 @@ export default function Login() {
 
     return (
         <div className="container is-max-desktop">
-            <form className="box mt-5">
+            <form className="no-shadow box mt-5">
                 <h2 className="title is-4">Log in to Postr</h2>
                 <fieldset className="field">
                     <input
@@ -46,7 +46,6 @@ export default function Login() {
                 <em>
                     Don't have an account? <Link to="/register">Sign up</Link>
                 </em>
-
             </form>
         </div>
     )

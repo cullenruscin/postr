@@ -1,29 +1,34 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import UserDetails from "../user/UserDetails";
+import PostForm from "../post/PostForm";
 import PostList from "../post/PostList";
-import { getAllUserPosts } from "../../modules/postManager";
+import { getUserPosts } from "../../modules/postManager";
 
-const ProfilePage = () => {
-
+const ProfilePage = ({ currentUser }) => {
     const { id } = useParams();
-
     const [posts, setPosts] = useState([]);
+    const [showPostForm, setShowPostForm] = useState(false);
 
     const getPosts = () => {
-        getAllUserPosts(id).then(posts => setPosts(posts));
+        getUserPosts(id).then(posts => setPosts(posts));
     };
 
     useEffect(() => {
         getPosts();
     }, [id]);
 
+    useEffect(() => {
+        setShowPostForm(currentUser === parseInt(id));
+    }, [currentUser, id]);
+
     return (
         <div className="container is-max-desktop">
             <UserDetails />
-            <PostList posts={posts} />
+            {showPostForm ? <PostForm getPosts={getPosts} /> : null}
+            <PostList posts={posts} currentUser={currentUser} />
         </div>
-    )
+    );
 };
 
 export default ProfilePage;

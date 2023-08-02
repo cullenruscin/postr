@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Postr.Models
@@ -14,6 +15,10 @@ namespace Postr.Models
 
         public int UserProfileId { get; set; }
 
-        public UserProfile UserProfile { get; set; }  
+        public UserProfile UserProfile { get; set; } 
+        
+        public List<Like> Likes { get; set; }
+
+        public int LikeCount { get; set; }
     }
 }

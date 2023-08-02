@@ -3,7 +3,7 @@ import { getAllPosts } from "../../modules/postManager";
 import PostList from "../post/PostList";
 import PostForm from "../post/PostForm";
 
-const HomePage = () => {
+const HomePage = ({ currentUser }) => {
     const [posts, setPosts] = useState([]);
 
     const getPosts = () => {
@@ -17,7 +17,7 @@ const HomePage = () => {
     return (
         <div className="container is-max-desktop">
             <PostForm getPosts={getPosts} />
-            <PostList posts={posts} />
+            <PostList posts={posts} currentUser={currentUser} />
         </div>
     );
 };
