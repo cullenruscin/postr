@@ -26,7 +26,7 @@ const ProfilePage = ({ currentUser }) => {
         <div className="container is-max-desktop">
             <UserDetails />
             {showPostForm ? <PostForm getPosts={getPosts} /> : null}
-            <PostList posts={posts} currentUser={currentUser} />
+            <PostList posts={posts} currentUser={currentUser} getPosts={getPosts} />
         </div>
     );
 };

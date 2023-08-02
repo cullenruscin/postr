@@ -3,19 +3,8 @@ import { useParams } from "react-router-dom";
 import { getPostDetails } from "../../modules/postManager";
 import Post from "./Post";
 
-const PostDetails = ({ currentUser }) => {
-    const { id } = useParams();
-    const [post, setPost] = useState({});
+const PostDetails = ({ currentUser, post, getPosts }) => {
 
-    // Fetch post details based on the 'id' parameter
-    const getPost = () => {
-        getPostDetails(id).then(post => setPost(post));
-    };
-
-    // Fetch post details when the 'id' parameter changes or on initial render
-    useEffect(() => {
-        getPost();
-    }, [id]);
 
     // If the post is not found (null), display a 404 message
     if (post === null) {
@@ -27,7 +16,7 @@ const PostDetails = ({ currentUser }) => {
         }
         return (
             <div className="mt-1">
-                <Post post={post} currentUser={currentUser} />
+                <Post post={post} currentUser={currentUser} getPosts={getPosts} />
             </div>
         );
     }

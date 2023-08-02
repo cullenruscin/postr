@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { createPost } from "../../modules/postManager";
 
-const PostForm = ({ getPosts }) => {
+const PostReplyForm = ({ parentId, getPosts }) => {
     const [content, setContent] = useState("");
     const [characterCount, setCharacterCount] = useState(0);
 
@@ -18,7 +18,7 @@ const PostForm = ({ getPosts }) => {
 
         const post = {
             content,
-            parentId: null
+            parentId: parentId
         };
 
         createPost(post).then(() => {
@@ -33,7 +33,7 @@ const PostForm = ({ getPosts }) => {
                 <fieldset className="field">
                     <textarea
                         className="textarea"
-                        placeholder="What's happening?"
+                        placeholder="Post your reply!"
                         value={content}
                         onChange={(e) => setContent(e.target.value)}
                     />
@@ -45,7 +45,7 @@ const PostForm = ({ getPosts }) => {
                             className="button is-link level-item"
                             disabled={isPostButtonDisabled}
                         >
-                            Post
+                            Reply
                         </button>
                     </div>
                     <div className="level-right">
@@ -61,4 +61,4 @@ const PostForm = ({ getPosts }) => {
     );
 };
 
-export default PostForm;
+export default PostReplyForm;

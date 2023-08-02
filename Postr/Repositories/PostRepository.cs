@@ -22,7 +22,7 @@ namespace Postr.Repositories
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                    SELECT p.Id, p.UserProfileId, p.Content, p.CreateDate,      
+                    SELECT p.Id, p.UserProfileId, p.Content, p.CreateDate, p.ParentId, p.IsDeleted,    
                     up.FirebaseUserId, up.FirstName, up.LastName, up.DisplayName, 
                     up.Email, up.CreateDate, up.UserTypeId                                       
                     FROM [Post] p
@@ -38,6 +38,7 @@ namespace Postr.Repositories
                                 Id = DbUtils.GetInt(reader, "Id"),
                                 Content = DbUtils.GetString(reader, "Content"),
                                 CreateDate = DbUtils.GetDateTime(reader, "CreateDate"),
+                                ParentId = DbUtils.GetNullableInt(reader, "ParentId"),
                                 UserProfileId = DbUtils.GetInt(reader, "UserProfileId"),
                                 UserProfile = new UserProfile()
                                 {
@@ -49,7 +50,8 @@ namespace Postr.Repositories
                                     Email = DbUtils.GetString(reader, "Email"),
                                     CreateDate = DbUtils.GetDateTime(reader, "CreateDate"),
                                     UserTypeId = DbUtils.GetInt(reader, "UserTypeId")
-                                }
+                                },
+                                IsDeleted = DbUtils.GetBool(reader, "IsDeleted")
                             };
 
                             post.Likes = _likeRepository.GetByPostId(post.Id);
@@ -71,7 +73,7 @@ namespace Postr.Repositories
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                SELECT p.Id, p.UserProfileId, p.Content, p.CreateDate,
+                SELECT p.Id, p.UserProfileId, p.Content, p.CreateDate, p.ParentId, p.IsDeleted,
                 up.FirebaseUserId, up.FirstName, up.LastName, up.DisplayName, up.Email, up.CreateDate, up.UserTypeId
                 FROM Post p
                 JOIN UserProfile up ON p.UserProfileId = up.Id
@@ -88,6 +90,7 @@ namespace Postr.Repositories
                                 Id = DbUtils.GetInt(reader, "Id"),
                                 Content = DbUtils.GetString(reader, "Content"),
                                 CreateDate = DbUtils.GetDateTime(reader, "CreateDate"),
+                                ParentId = DbUtils.GetNullableInt(reader, "ParentId"),
                                 UserProfileId = DbUtils.GetInt(reader, "UserProfileId"),
                                 UserProfile = new UserProfile()
                                 {
@@ -100,6 +103,7 @@ namespace Postr.Repositories
                                     CreateDate = DbUtils.GetDateTime(reader, "CreateDate"),
                                     UserTypeId = DbUtils.GetInt(reader, "UserTypeId")
                                 },
+                                IsDeleted = DbUtils.GetBool(reader, "IsDeleted")
                             };
 
                             // Fetch the likes for this post using the likeRepository
@@ -115,6 +119,61 @@ namespace Postr.Repositories
                 }
             }
         }
+        public List<Post> GetByParentId(int parentId)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        SELECT p.Id, p.UserProfileId, p.Content, p.CreateDate, p.ParentId, p.IsDeleted,
+                            up.FirebaseUserId, up.FirstName, up.LastName, up.DisplayName, up.Email, up.CreateDate, up.UserTypeId
+                        FROM Post p
+                        JOIN UserProfile up ON p.UserProfileId = up.Id
+                        WHERE p.ParentId = @ParentId";
+
+                    DbUtils.AddParameter(cmd, "@ParentId", parentId);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        var childPosts = new List<Post>();
+                        while (reader.Read())
+                        {
+                            var post = new Post()
+                            {
+                                Id = DbUtils.GetInt(reader, "Id"),
+                                Content = DbUtils.GetString(reader, "Content"),
+                                CreateDate = DbUtils.GetDateTime(reader, "CreateDate"),
+                                ParentId = DbUtils.GetNullableInt(reader, "ParentId"),
+                                UserProfileId = DbUtils.GetInt(reader, "UserProfileId"),
+                                UserProfile = new UserProfile()
+                                {
+                                    Id = DbUtils.GetInt(reader, "UserProfileId"),
+                                    FirebaseUserId = DbUtils.GetString(reader, "FirebaseUserId"),
+                                    FirstName = DbUtils.GetString(reader, "FirstName"),
+                                    LastName = DbUtils.GetString(reader, "LastName"),
+                                    DisplayName = DbUtils.GetString(reader, "DisplayName"),
+                                    Email = DbUtils.GetString(reader, "Email"),
+                                    CreateDate = DbUtils.GetDateTime(reader, "CreateDate"),
+                                    UserTypeId = DbUtils.GetInt(reader, "UserTypeId")
+                                },
+                                IsDeleted = DbUtils.GetBool(reader, "IsDeleted")
+                            };
+
+                            // Fetch the likes for this post using the likeRepository
+                            post.Likes = _likeRepository.GetByPostId(post.Id);
+
+                            // Calculate the like count
+                            post.LikeCount = post.Likes.Count;
+
+                            childPosts.Add(post);
+                        }
+                        return childPosts;
+                    }
+                }
+            }
+        }
 
         public List<Post> GetByUserProfileId(int userProfileId)
         {
@@ -124,7 +183,7 @@ namespace Postr.Repositories
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                SELECT p.Id, p.Content, p.CreateDate,
+                SELECT p.Id, p.Content, p.CreateDate, p.ParentId, p.IsDeleted,
                     up.FirebaseUserId, up.FirstName, up.LastName, up.DisplayName, up.Email, up.CreateDate, up.UserTypeId
                 FROM Post p
                 JOIN UserProfile up ON p.UserProfileId = up.Id
@@ -142,6 +201,7 @@ namespace Postr.Repositories
                                 Id = DbUtils.GetInt(reader, "Id"),
                                 Content = DbUtils.GetString(reader, "Content"),
                                 CreateDate = DbUtils.GetDateTime(reader, "CreateDate"),
+                                ParentId = DbUtils.GetNullableInt(reader, "ParentId"),
                                 UserProfileId = userProfileId,
                                 UserProfile = new UserProfile()
                                 {
@@ -154,6 +214,7 @@ namespace Postr.Repositories
                                     CreateDate = DbUtils.GetDateTime(reader, "CreateDate"),
                                     UserTypeId = DbUtils.GetInt(reader, "UserTypeId")
                                 },
+                                IsDeleted = DbUtils.GetBool(reader, "IsDeleted")
                             };
 
                             // Fetch the likes for this post using the likeRepository
@@ -179,16 +240,36 @@ namespace Postr.Repositories
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                    INSERT INTO [Post] (Content, CreateDate, UserProfileId)   
+                    INSERT INTO [Post] (Content, CreateDate, UserProfileId, ParentId, IsDeleted)   
                     OUTPUT INSERTED.ID   
-                    VALUES (@Content, @CreateDate, @UserProfileId)
+                    VALUES (@Content, @CreateDate, @UserProfileId, @ParentId, @IsDeleted)
                     ";
 
                     DbUtils.AddParameter(cmd, "@Content", post.Content);
                     DbUtils.AddParameter(cmd, "@CreateDate", post.CreateDate);
                     DbUtils.AddParameter(cmd, "@UserProfileId", post.UserProfileId);
+                    DbUtils.AddParameter(cmd, "@ParentId", post.ParentId);
+                    DbUtils.AddParameter(cmd, "@IsDeleted", post.IsDeleted);
 
                     post.Id = (int)cmd.ExecuteScalar();
+                }
+            }
+        }
+        public void SoftDelete(int id)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                    UPDATE [Post] 
+                    SET IsDeleted = 1
+                    WHERE Id = @id";
+
+                    DbUtils.AddParameter(cmd, "@Id", id);
+
+                    cmd.ExecuteNonQuery();
                 }
             }
         }

@@ -20,5 +20,11 @@ namespace Postr.Models
         public List<Like> Likes { get; set; }
 
         public int LikeCount { get; set; }
+
+        public int? ParentId { get; set; }
+
+        public Post ParentPost { get; set; }
+
+        public bool IsDeleted { get; set; }
     }
 }
