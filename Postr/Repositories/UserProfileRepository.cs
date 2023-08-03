@@ -5,7 +5,6 @@ using Microsoft.Extensions.Configuration;
 using Postr.Models;
 using Postr.Utils;
 
-
 namespace Postr.Repositories
 {
     public class UserProfileRepository : BaseRepository, IUserProfileRepository
@@ -20,14 +19,15 @@ namespace Postr.Repositories
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"SELECT up.Id, up.FirebaseUserId, up.DisplayName, up.FirstName, up.LastName,
-                                        up.Email, up.CreateDate, up.UserTypeId, ut.Name AS UserTypeName
+                                        up.Email, up.CreateDate, up.UserTypeId, ut.Name AS UserTypeName,
+                                        up.DisplayPicture, up.Bio
 
                                         FROM [UserProfile] up
 
                                         LEFT JOIN UserType ut on up.UserTypeId = ut.Id";
 
-                    using (SqlDataReader reader = cmd.ExecuteReader()) 
-                    { 
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
                         var userProfiles = new List<UserProfile>();
                         while (reader.Read())
                         {
@@ -41,11 +41,13 @@ namespace Postr.Repositories
                                 Email = DbUtils.GetString(reader, "Email"),
                                 CreateDate = DbUtils.GetDateTime(reader, "CreateDate"),
                                 UserTypeId = DbUtils.GetInt(reader, "UserTypeId"),
-                                UserType = new UserType() 
+                                UserType = new UserType()
                                 {
                                     Id = DbUtils.GetInt(reader, "UserTypeId"),
                                     Name = DbUtils.GetString(reader, "UserTypeName")
-                                }
+                                },
+                                DisplayPicture = DbUtils.GetString(reader, "DisplayPicture"),
+                                Bio = DbUtils.GetString(reader, "Bio")
                             });
                         }
                         return userProfiles;
@@ -56,13 +58,14 @@ namespace Postr.Repositories
 
         public UserProfile GetByFirebaseUserId(string firebaseUserId)
         {
-            using (SqlConnection conn = Connection) 
-            { 
+            using (SqlConnection conn = Connection)
+            {
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"SELECT up.Id, up.FirebaseUserId, up.DisplayName, up.FirstName, up.LastName,
-                                        up.Email, up.CreateDate, up.UserTypeId, ut.Name AS UserTypeName
+                                        up.Email, up.CreateDate, up.UserTypeId, ut.Name AS UserTypeName,
+                                        up.DisplayPicture, up.Bio
 
                                         FROM [UserProfile] up
 
@@ -76,7 +79,7 @@ namespace Postr.Repositories
 
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        if(reader.Read())
+                        if (reader.Read())
                         {
                             userProfile = new UserProfile()
                             {
@@ -92,7 +95,9 @@ namespace Postr.Repositories
                                 {
                                     Id = DbUtils.GetInt(reader, "UserTypeId"),
                                     Name = DbUtils.GetString(reader, "UserTypeName"),
-                                }
+                                },
+                                DisplayPicture = DbUtils.GetString(reader, "DisplayPicture"),
+                                Bio = DbUtils.GetString(reader, "Bio")
                             };
                         }
                         reader.Close();
@@ -111,7 +116,8 @@ namespace Postr.Repositories
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"SELECT up.Id, up.FirebaseUserId, up.DisplayName, up.FirstName, up.LastName,
-                                        up.Email, up.CreateDate, up.UserTypeId, ut.Name AS UserTypeName
+                                        up.Email, up.CreateDate, up.UserTypeId, ut.Name AS UserTypeName,
+                                        up.DisplayPicture, up.Bio
 
                                         FROM [UserProfile] up
 
@@ -141,7 +147,9 @@ namespace Postr.Repositories
                                 {
                                     Id = DbUtils.GetInt(reader, "UserTypeId"),
                                     Name = DbUtils.GetString(reader, "UserTypeName"),
-                                }
+                                },
+                                DisplayPicture = DbUtils.GetString(reader, "DisplayPicture"),
+                                Bio = DbUtils.GetString(reader, "Bio")
                             };
                         }
                         reader.Close();
@@ -157,11 +165,11 @@ namespace Postr.Repositories
             using (SqlConnection conn = Connection)
             {
                 conn.Open();
-                using (SqlCommand cmd = conn.CreateCommand()) 
+                using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"INSERT INTO [UserProfile] (FirebaseUserId, FirstName, LastName, DisplayName, Email, CreateDate, UserTypeId)
+                    cmd.CommandText = @"INSERT INTO [UserProfile] (FirebaseUserId, FirstName, LastName, DisplayName, Email, CreateDate, UserTypeId, DisplayPicture, Bio)
                                         OUTPUT INSERTED.ID
-                                        VALUES (@FirebaseUserId, @FirstName, @LastName, @DisplayName, @Email, @CreateDate, @UserTypeId)";
+                                        VALUES (@FirebaseUserId, @FirstName, @LastName, @DisplayName, @Email, @CreateDate, @UserTypeId, @DisplayPicture, @Bio)";
 
                     DbUtils.AddParameter(cmd, "@FirebaseUserId", userProfile.FirebaseUserId);
                     DbUtils.AddParameter(cmd, "@FirstName", userProfile.FirstName);
@@ -170,8 +178,38 @@ namespace Postr.Repositories
                     DbUtils.AddParameter(cmd, "@Email", userProfile.Email);
                     DbUtils.AddParameter(cmd, "@CreateDate", userProfile.CreateDate);
                     DbUtils.AddParameter(cmd, "@UserTypeId", userProfile.UserTypeId);
+                    DbUtils.AddParameter(cmd, "@DisplayPicture", userProfile.DisplayPicture);
+                    DbUtils.AddParameter(cmd, "@Bio", userProfile.Bio);
 
                     userProfile.Id = (int)cmd.ExecuteScalar();
+                }
+            }
+        }
+        public void Update(UserProfile userProfile)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"UPDATE [UserProfile]
+                                    SET FirstName = @FirstName,
+                                        LastName = @LastName,
+                                        DisplayName = @DisplayName,
+                                        DisplayPicture = @DisplayPicture,
+                                        Email = @Email,
+                                        Bio = @Bio
+                                    WHERE Id = @Id";
+
+                    DbUtils.AddParameter(cmd, "@FirstName", userProfile.FirstName);
+                    DbUtils.AddParameter(cmd, "@LastName", userProfile.LastName);
+                    DbUtils.AddParameter(cmd, "@DisplayName", userProfile.DisplayName);
+                    DbUtils.AddParameter(cmd, "@DisplayPicture", userProfile.DisplayPicture);
+                    DbUtils.AddParameter(cmd, "@Email", userProfile.Email);
+                    DbUtils.AddParameter(cmd, "@Bio", userProfile.Bio);
+                    DbUtils.AddParameter(cmd, "@Id", userProfile.Id);
+
+                    cmd.ExecuteNonQuery();
                 }
             }
         }

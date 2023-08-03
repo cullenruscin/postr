@@ -70,6 +70,20 @@ namespace Postr.Controllers
                 new { firebaseUserId = userProfile.FirebaseUserId },
                 userProfile);
         }
+
+        [HttpPut("{id}")]
+        public IActionResult Edit(int id, UserProfile userProfile)
+        {
+            if (id != userProfile.Id)
+            {
+                return BadRequest();
+            }
+
+            _userProfileRepository.Update(userProfile);
+            return NoContent();
+
+        }
+
         private UserProfile GetCurrentUserProfileResult()
         {
             var firebaseUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;

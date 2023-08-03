@@ -32,7 +32,7 @@ const PostForm = ({ getPosts }) => {
             <form className="box no-shadow">
                 <fieldset className="field">
                     <textarea
-                        className="textarea"
+                        className="post textarea"
                         placeholder="What's happening?"
                         value={content}
                         onChange={(e) => setContent(e.target.value)}
@@ -42,7 +42,7 @@ const PostForm = ({ getPosts }) => {
                     <div className="level-left">
                         <button
                             onClick={createPostButtonOnClick}
-                            className="button is-link level-item"
+                            className="btn button is-black is-rounded level-item"
                             disabled={isPostButtonDisabled}
                         >
                             Post

@@ -10,13 +10,13 @@ const NavBar = ({ isLoggedIn, currentUser }) => {
     };
 
     return (
-        <nav className="navbar" role="navigation" aria-label="main navigation">
-            <div className="container is-max-desktop">
+        <nav className="navbar " role="navigation" aria-label="main navigation">
+            <div className="nav-container container is-max-desktop">
                 <div className="navbar-brand">
                     <Link className="navbar-item" to="/home" aria-label="Home">
                         <span className="icon">
                             <i className="material-icons-outlined" alt="icon">
-                                mark_as_unread
+                                markunread_mailbox
                             </i>
                         </span>
                         <span className="ml-1">Postr</span>

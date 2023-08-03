@@ -5,6 +5,7 @@ import PostPage from "./PostPage";
 import Login from "../auth/Login";
 import Register from "../auth/Register";
 import ProfilePage from "./ProfilePage";
+import ProfileEditPage from "./ProfileEditPage";
 
 const ApplicationViews = ({ isLoggedIn, currentUser }) => {
     return (
@@ -17,6 +18,7 @@ const ApplicationViews = ({ isLoggedIn, currentUser }) => {
                     <Route path="register" element={<Register />} />
                     <Route path="post/:id" element={<PostPage currentUser={currentUser} />} />
                     <Route path="user/:id" element={<ProfilePage currentUser={currentUser} />} />
+                    <Route path="user/:id/edit" element={<ProfileEditPage currentUser={currentUser} />} />
                 </Route>
                 <Route path="*" element={<p>Whoops, nothing here...</p>} />
             </Routes>

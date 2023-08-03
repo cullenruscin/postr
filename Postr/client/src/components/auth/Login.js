@@ -18,34 +18,30 @@ export default function Login() {
     return (
         <div className="container is-max-desktop">
             <form className="no-shadow box mt-5">
-                <h2 className="title is-4">Log in to Postr</h2>
+                <h2 className="title is-4 has-text-weight-bold has-text-black">Log in to Postr</h2>
                 <fieldset className="field">
+                    <label className="label">Email</label>
                     <input
                         required autoFocus
                         id="login-email"
                         type="text"
                         className="input"
-                        placeholder="Email"
                         onChange={(e) => setEmail(e.target.value)}
                     />
                 </fieldset>
                 <fieldset className="field">
+                    <label className="label">Password</label>
                     <input
                         id="login-password"
                         type="password"
                         className="input"
-                        placeholder="Password"
                         onChange={(e) => setPassword(e.target.value)}
                     />
                 </fieldset>
                 <button
                     onClick={(clickEvent) => loginButtonOnClick(clickEvent)}
-                    className="button is-link"
+                    className="btn button is-black is-rounded level-item"
                 >Login</button>
-                <br />
-                <em>
-                    Don't have an account? <Link to="/register">Sign up</Link>
-                </em>
             </form>
         </div>
     )

@@ -34,6 +34,13 @@ namespace Postr.Models
         public int UserTypeId { get; set; }
         public UserType UserType { get; set; }
 
+        [Required]
+        [MaxLength(256)]
+        public string DisplayPicture { get; set; }
+
+        [MaxLength(256)]
+        public string Bio { get; set; }
+
         public string FullName
         {
             get

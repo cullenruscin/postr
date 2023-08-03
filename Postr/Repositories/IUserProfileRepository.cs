@@ -10,5 +10,6 @@ namespace Postr.Repositories
         UserProfile GetByFirebaseUserId(string firebaseUserId);
         UserProfile GetById(int id);
         void Add(UserProfile user);
+        void Update(UserProfile userProfile);
     }
 }

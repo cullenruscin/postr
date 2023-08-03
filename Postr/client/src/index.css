@@ -1,7 +1,7 @@
 @import 'material-icons/iconfont/material-icons.css';
 
 html {
-  background-color: hsl(0, 0%, 96%);
+  background-color: hsl(0, 0%, 95%);
 }
 
 body {
@@ -24,4 +24,52 @@ code {
 
 .like-button {
   transition: color 0.3s ease;
+}
+
+.is-max-desktop {
+  max-width: 750px;
+}
+
+.navbar .navbar-item {
+  color: black;
+}
+
+.button.is-small.is-light.has-background-white {
+  color: black;
+}
+
+.button.is-small.is-light.has-background-white:hover {
+  color: #485fc7;
+}
+
+.btn:hover {
+  background-color: #485fc7 !important;
+}
+
+.post {
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+  resize: none;
+}
+
+.post:focus {
+  outline: none !important;
+
+}
+
+.label {
+  color: black;
+}
+
+a {
+  color: black;
+}
+
+a:hover {
+  color: #485fc7;
+}
+
+.input {
+  box-shadow: none;
 }

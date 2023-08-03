@@ -23,7 +23,7 @@ namespace Postr.Repositories
                 {
                     cmd.CommandText = @"
                     SELECT p.Id, p.UserProfileId, p.Content, p.CreateDate, p.ParentId, p.IsDeleted,    
-                    up.FirebaseUserId, up.FirstName, up.LastName, up.DisplayName, 
+                    up.FirebaseUserId, up.FirstName, up.LastName, up.DisplayName, up.DisplayPicture,
                     up.Email, up.CreateDate, up.UserTypeId                                       
                     FROM [Post] p
                     JOIN UserProfile up ON p.UserProfileId = up.Id";
@@ -47,6 +47,7 @@ namespace Postr.Repositories
                                     FirstName = DbUtils.GetString(reader, "FirstName"),
                                     LastName = DbUtils.GetString(reader, "LastName"),
                                     DisplayName = DbUtils.GetString(reader, "DisplayName"),
+                                    DisplayPicture = DbUtils.GetString(reader, "DisplayPicture"),
                                     Email = DbUtils.GetString(reader, "Email"),
                                     CreateDate = DbUtils.GetDateTime(reader, "CreateDate"),
                                     UserTypeId = DbUtils.GetInt(reader, "UserTypeId")
@@ -74,7 +75,7 @@ namespace Postr.Repositories
                 {
                     cmd.CommandText = @"
                 SELECT p.Id, p.UserProfileId, p.Content, p.CreateDate, p.ParentId, p.IsDeleted,
-                up.FirebaseUserId, up.FirstName, up.LastName, up.DisplayName, up.Email, up.CreateDate, up.UserTypeId
+                up.FirebaseUserId, up.FirstName, up.LastName, up.DisplayName, up.DisplayPicture, up.Email, up.CreateDate, up.UserTypeId
                 FROM Post p
                 JOIN UserProfile up ON p.UserProfileId = up.Id
                 WHERE p.Id = @Id";
@@ -99,6 +100,7 @@ namespace Postr.Repositories
                                     FirstName = DbUtils.GetString(reader, "FirstName"),
                                     LastName = DbUtils.GetString(reader, "LastName"),
                                     DisplayName = DbUtils.GetString(reader, "DisplayName"),
+                                    DisplayPicture = DbUtils.GetString(reader, "DisplayPicture"),
                                     Email = DbUtils.GetString(reader, "Email"),
                                     CreateDate = DbUtils.GetDateTime(reader, "CreateDate"),
                                     UserTypeId = DbUtils.GetInt(reader, "UserTypeId")
@@ -128,7 +130,7 @@ namespace Postr.Repositories
                 {
                     cmd.CommandText = @"
                         SELECT p.Id, p.UserProfileId, p.Content, p.CreateDate, p.ParentId, p.IsDeleted,
-                            up.FirebaseUserId, up.FirstName, up.LastName, up.DisplayName, up.Email, up.CreateDate, up.UserTypeId
+                            up.FirebaseUserId, up.FirstName, up.LastName, up.DisplayName, up.DisplayPicture, up.Email, up.CreateDate, up.UserTypeId
                         FROM Post p
                         JOIN UserProfile up ON p.UserProfileId = up.Id
                         WHERE p.ParentId = @ParentId";
@@ -154,6 +156,7 @@ namespace Postr.Repositories
                                     FirstName = DbUtils.GetString(reader, "FirstName"),
                                     LastName = DbUtils.GetString(reader, "LastName"),
                                     DisplayName = DbUtils.GetString(reader, "DisplayName"),
+                                    DisplayPicture = DbUtils.GetString(reader, "DisplayPicture"),
                                     Email = DbUtils.GetString(reader, "Email"),
                                     CreateDate = DbUtils.GetDateTime(reader, "CreateDate"),
                                     UserTypeId = DbUtils.GetInt(reader, "UserTypeId")
@@ -184,7 +187,7 @@ namespace Postr.Repositories
                 {
                     cmd.CommandText = @"
                 SELECT p.Id, p.Content, p.CreateDate, p.ParentId, p.IsDeleted,
-                    up.FirebaseUserId, up.FirstName, up.LastName, up.DisplayName, up.Email, up.CreateDate, up.UserTypeId
+                    up.FirebaseUserId, up.FirstName, up.LastName, up.DisplayName, up.DisplayPicture, up.Email, up.CreateDate, up.UserTypeId
                 FROM Post p
                 JOIN UserProfile up ON p.UserProfileId = up.Id
                 WHERE up.Id = @UserProfileId";
@@ -210,6 +213,7 @@ namespace Postr.Repositories
                                     FirstName = DbUtils.GetString(reader, "FirstName"),
                                     LastName = DbUtils.GetString(reader, "LastName"),
                                     DisplayName = DbUtils.GetString(reader, "DisplayName"),
+                                    DisplayPicture = DbUtils.GetString(reader, "DisplayPicture"),
                                     Email = DbUtils.GetString(reader, "Email"),
                                     CreateDate = DbUtils.GetDateTime(reader, "CreateDate"),
                                     UserTypeId = DbUtils.GetInt(reader, "UserTypeId")

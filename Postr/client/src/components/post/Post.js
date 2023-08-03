@@ -4,10 +4,14 @@ import TimeElapsed from "../helpers/TimeElapsed";
 import { LikeButton } from "../buttons/LikeButton";
 import ReplyButton from "../buttons/ReplyButton";
 import { getPostDetails, deletePost } from "../../modules/postManager";
+import DeletePostModal from "../helpers/DeletePostModal";
 
 const Post = ({ post, currentUser, getPosts }) => {
     const [parentPost, setParentPost] = useState(null);
     const navigate = useNavigate();
+
+    //This is for the modal for deleting a post
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
         if (post.parentId !== null) {
@@ -23,7 +27,7 @@ const Post = ({ post, currentUser, getPosts }) => {
 
     // Navigate to the Post Page when the post is clicked
     const postOnClick = (e) => {
-        navigate(`/post/${post?.id}`);
+        navigate(`/post/${post.id}`);
     }
 
     //Navigate to the Post Page of the parent when the link is clicked
@@ -35,20 +39,32 @@ const Post = ({ post, currentUser, getPosts }) => {
     // Navigate to the User's profile when the username is clicked
     const userOnClick = (e) => {
         e.stopPropagation();
-        navigate(`/user/${post?.userProfileId}`);
+        navigate(`/user/${post.userProfileId}`);
     }
 
     // Call the deletePost function from postManager with the post.id to soft delete the post
     const handleDeleteClick = () => {
-        deletePost(post.id).then(() => getPosts());
+        setIsModalOpen(true);
+    };
+
+    // Function to handle the actual post deletion after user confirms in the modal
+    const handlePostDelete = () => {
+        deletePost(post.id)
+            .then(() => {
+                setIsModalOpen(false);
+                getPosts();
+            })
+            .catch((error) => {
+                console.error("Error deleting post:", error);
+            });
     };
 
     return (
         <div className="box no-shadow mb-1" style={{ cursor: "pointer" }}>
             <article className="media">
                 <div className="media-left">
-                    <figure className="image is-48x48">
-                        <img className="is-rounded" src="https://bulma.io/images/placeholders/128x128.png" alt="DisplayImage" />
+                    <figure className="image is-square is-48x48">
+                        <img className="is-rounded" src={post.userProfile?.displayPicture} alt="DisplayImage" />
                     </figure>
                 </div>
                 <div className="media-content ml-2">
@@ -68,7 +84,9 @@ const Post = ({ post, currentUser, getPosts }) => {
                             <small className="has-text-grey"> ∙ <TimeElapsed datetimeString={post.createDate} /></small>
                             <br />
                             {post.isDeleted ? (
-                                <em className="has-text-grey">This post has been deleted</em>
+                                <span className="has-text-grey level-left mt-2">
+                                    <span class="material-icons-outlined mr-1 ">error_outline</span>This post has been deleted
+                                </span>
                             ) : (
                                 post.content
                             )}
@@ -95,7 +113,12 @@ const Post = ({ post, currentUser, getPosts }) => {
                     </nav>
                 </div>
             </article>
+
+            <DeletePostModal isOpen={isModalOpen} onCancel={() => setIsModalOpen(false)} onConfirm={handlePostDelete} />
+
         </div>
+
+
     );
 };
 
