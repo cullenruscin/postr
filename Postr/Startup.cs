@@ -33,6 +33,7 @@ namespace Postr
             services.AddTransient<IUserProfileRepository, UserProfileRepository>();
             services.AddTransient<IPostRepository, PostRepository>();
             services.AddTransient<ILikeRepository, LikeRepository>();
+            services.AddTransient<ITagRepository, TagRepository>();
 
             services.AddControllers();
 

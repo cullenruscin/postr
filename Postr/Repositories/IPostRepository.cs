@@ -11,5 +11,8 @@ namespace Postr.Repositories
         Post GetById(int id);
         void Add(Post post);
         void SoftDelete(int id);
+
+        void AddTagsToPost(int postId, List<int> tagIds);
+        void RemoveTagsFromPost(int postId, List<int> tagIds);
     }
 }

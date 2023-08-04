@@ -59,6 +59,10 @@ const Post = ({ post, currentUser, getPosts }) => {
             });
     };
 
+    if (post === null || post === undefined) {
+        return <p></p>
+    }
+
     return (
         <div className="box no-shadow mb-1" style={{ cursor: "pointer" }}>
             <article className="media">
@@ -85,7 +89,7 @@ const Post = ({ post, currentUser, getPosts }) => {
                             <br />
                             {post.isDeleted ? (
                                 <span className="has-text-grey level-left mt-2">
-                                    <span class="material-icons-outlined mr-1 ">error_outline</span>This post has been deleted
+                                    <span className="material-icons-outlined mr-1 ">error_outline</span>This post has been deleted
                                 </span>
                             ) : (
                                 post.content
@@ -109,6 +113,13 @@ const Post = ({ post, currentUser, getPosts }) => {
                                     </button>
                                 </div>
                             )}
+                        </div>
+                        <div className="level-right">
+                            {
+                                post.tags && post.tags.length > 0
+                                    ? post.tags.map(tag => <span class="tag is-light ml-1" key={`pt-${post.id}-t-${tag.id}`}>{tag.name}</span>)
+                                    : <></>
+                            }
                         </div>
                     </nav>
                 </div>

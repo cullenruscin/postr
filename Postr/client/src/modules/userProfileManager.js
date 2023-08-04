@@ -44,6 +44,5 @@ export const updateUserProfile = (userObj) => {
                 bio: userObj.bio
             })
         })
-            .then(res => res.json())
     })
 }

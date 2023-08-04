@@ -1,10 +1,6 @@
-import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { getPostDetails } from "../../modules/postManager";
 import Post from "./Post";
 
 const PostDetails = ({ currentUser, post, getPosts }) => {
-
 
     // If the post is not found (null), display a 404 message
     if (post === null) {

@@ -26,5 +26,6 @@ namespace Postr.Models
         public Post ParentPost { get; set; }
 
         public bool IsDeleted { get; set; }
+        public List<Tag> Tags { get; set; }
     }
 }

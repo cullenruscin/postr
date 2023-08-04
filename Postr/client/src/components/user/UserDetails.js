@@ -5,6 +5,7 @@ import { getUserDetailsById } from "../../modules/userProfileManager";
 const UserDetails = ({ currentUser }) => {
     const { id } = useParams();
     const [user, setUser] = useState({});
+    const [showDropdown, setShowDropdown] = useState(false);
 
     const navigate = useNavigate();
 
@@ -14,6 +15,16 @@ const UserDetails = ({ currentUser }) => {
                 setUser(userData);
             })
     }, [id])
+
+    const handleButtonClick = () => {
+        setShowDropdown(!showDropdown);
+    };
+
+    const handleEditProfile = () => {
+        // Perform the action you want when the "Edit Profile" option is clicked
+        // For example, you can call your existing `editOnClick` function here
+        editOnClick();
+    };
 
     // Navigate to the Post Page when the post is clicked
     const editOnClick = (e) => {
@@ -35,12 +46,32 @@ const UserDetails = ({ currentUser }) => {
                         <div className="media-content">
                             <p className="title is-4 has-text-weight-bold has-text-black">{user.fullName}
                                 {currentUser === user.id && (
-                                    <span className="ml-2">
-                                        <button className="button is-small is-light has-background-white" onClick={editOnClick}>
-                                            <span className="icon">
-                                                <i className="material-icons-outlined">edit</i>
-                                            </span>
-                                        </button>
+                                    <span>
+                                        <div className={`dropdown ${showDropdown ? 'is-active' : ''}`}>
+                                            <div className="dropdown-trigger">
+                                                <button
+                                                    className="button is-small is-light has-background-white"
+                                                    aria-haspopup="true"
+                                                    aria-controls="dropdown-menu"
+                                                    onClick={handleButtonClick}
+                                                >
+                                                    <span className="icon">
+                                                        <i className="material-icons-outlined">more_vert</i>
+                                                    </span>
+                                                </button>
+                                            </div>
+                                            <div className="dropdown-menu" id="dropdown-menu" role="menu">
+                                                <div className="dropdown-content">
+                                                    <a
+                                                        className="dropdown-item"
+                                                        href="#"
+                                                        onClick={handleEditProfile}
+                                                    >
+                                                        Edit Profile
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </span>
                                 )}
                             </p>

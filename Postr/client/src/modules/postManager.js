@@ -120,3 +120,25 @@ export const deletePost = (postId) => {
         });
     });
 }
+
+export const addTagsToPost = (postId, tagIds) => {
+    return getToken().then((token) => {
+        return fetch(`${URL}/${postId}/tags`, {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(tagIds),
+        })
+            .then((resp) => {
+                if (resp.ok) {
+                    console.log("Tags added to the post successfully!");
+                } else {
+                    throw new Error(
+                        "An error occurred while trying to add tags to the post.",
+                    );
+                }
+            });
+    });
+};

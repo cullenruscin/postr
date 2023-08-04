@@ -2,7 +2,7 @@ import { getToken } from "./authManager";
 
 const URL = "/api/Like";
 
-export const GetLikesByPostId = (postId) => { //GetLikesByPostId
+export const GetLikesByPostId = (postId) => {
     return getToken().then((token) => {
         return fetch(`${URL}/post/${postId}`, {
             method: "GET",
@@ -23,7 +23,7 @@ export const GetLikesByPostId = (postId) => { //GetLikesByPostId
     });
 }
 
-export const GetLikeCountByPostId = (postId) => { //GetLikeCountByPostId
+export const GetLikeCountByPostId = (postId) => {
     return getToken().then((token) => {
         return fetch(`${URL}/count/${postId}`, {
             method: "GET",
